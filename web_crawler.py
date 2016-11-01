@@ -1,5 +1,7 @@
 #Finishing the page ranking algorithm.
 
+
+#Compute rank for each page to determine which page to show
 def compute_ranks(graph):
     d = 0.8 # damping factor
     numloops = 10
@@ -23,7 +25,7 @@ def compute_ranks(graph):
     return ranks
 
 
-
+#Sample pages content
 cache = {
    'http://udacity.com/cs101x/urank/index.html': """<html>
 <body>
@@ -142,6 +144,8 @@ Hummus Recipe
 """, 
 }
 
+
+#Starting from seed, crawl all pages and add to crawled list
 def crawl_web(seed): # returns index, graph of inlinks
     tocrawl = [seed]
     crawled = []
@@ -163,12 +167,15 @@ def crawl_web(seed): # returns index, graph of inlinks
     return index, graph
 
 
+
+#Get page content for the page
 def get_page(url):
     if url in cache:
         return cache[url]
     else:
         return None
-    
+
+#Find the next link this page is connected to
 def get_next_target(page):
     start_link = page.find('<a href=')
     if start_link == -1: 
@@ -178,6 +185,8 @@ def get_next_target(page):
     url = page[start_quote + 1:end_quote]
     return url, end_quote
 
+
+#Get all the links connected to the page
 def get_all_links(page):
     links = []
     while True:
@@ -189,12 +198,14 @@ def get_all_links(page):
             break
     return links
 
-
+#union to string
 def union(a, b):
     for e in b:
         if e not in a:
             a.append(e)
 
+            
+#Add url to index hashtable base on words
 def add_page_to_index(index, url, content):
     words = content.split()
     for word in words:
